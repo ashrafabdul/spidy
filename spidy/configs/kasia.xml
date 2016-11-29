@@ -1,0 +1,66 @@
+<spider>
+  <name>KasiaMobile</name>
+  <description>Get all new mobile phones from the website.</description>
+  <dbConfig>
+    <host>localhost</host>
+    <port>27017</port>
+    <db_name>test</db_name>
+    <collection_name>test</collection_name>
+  </dbConfig>
+  <item>
+    <name>Mobile</name>
+    <description>A mobile from Kasia website.</description>
+    <startUrl>http://kasiamobile.com/</startUrl>
+    <field>
+      <name>Category</name>
+      <page>
+        <crawlSequence>1</crawlSequence>
+        <fragmentXpath>//ul[@class="products"]//a</fragmentXpath>
+        <fieldXpath>//h1[@class="entry-title"]/text()</fieldXpath>
+      </page>
+    </field>
+    <field>
+      <name>Model</name>
+      <page>
+        <crawlSequence>1</crawlSequence>
+        <fragmentXpath>//ul[@class="products"]//a</fragmentXpath>
+        <fieldXpath>./h3/text()</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>Description</name>
+      <page>
+        <crawlSequence>1</crawlSequence>
+        <fragmentXpath>//ul[@class="products"]//a</fragmentXpath>
+        <fieldXpath>./div[@itemprop="description"]//text()</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>ImageRef</name>
+      <page>
+        <crawlSequence>1</crawlSequence>
+        <fragmentXpath>//ul[@class="products"]//a</fragmentXpath>
+        <fieldXpath>./img/@src</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>Price</name>
+      <page>
+        <crawlSequence>1</crawlSequence>
+        <fragmentXpath>//ul[@class="products"]//a</fragmentXpath>
+        <fieldXpath>./span[@class="price"]/span//text()</fieldXpath>
+      </page>
+    </field>
+
+    <paginations>
+      <pagination>
+        <crawlSequence>1</crawlSequence>
+        <xpath>//*[@id="menu-brands-menu"]//a/@href</xpath>
+        <description>Main menu of the website</description>
+      </pagination>
+    </paginations>
+  </item>
+</spider>

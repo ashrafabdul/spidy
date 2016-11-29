@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spider>
+	<name>Dmoz</name>
+	<description>Gets category details</description>
+	<dbConfig>
+    <host>localhost</host>
+    <port>27017</port>
+    <db_name>test</db_name>
+    <collection_name>test</collection_name>
+  </dbConfig>
+	<item>
+		<name>Categories</name>
+		<description>Item class for categories</description>
+		<startUrl>http://www.dmoz.org/</startUrl>
+		<field>
+			<name>main_cat_name</name>
+			<description>Name of the main category</description>
+			<page>
+				<crawlSequence>1</crawlSequence>
+				<fragmentXpath>//section[@id="category-section"]/aside/div</fragmentXpath>
+				<fieldXpath>.//h2/a/text()</fieldXpath>
+			</page>
+		</field>
+		<field>
+			<name>main_cat_link</name>
+			<description>Link for mc1</description>
+			<page>
+				<crawlSequence>1</crawlSequence>
+				<fragmentXpath>//section[@id="category-section"]/aside/div</fragmentXpath>
+				<fieldXpath>.//h2/a/@href</fieldXpath>
+			</page>
+		<isCrawlUrl>
+				<crawlSequence>5</crawlSequence>
+		</isCrawlUrl>
+		</field>
+		<field>
+			<name>mc1_name</name>
+			<description>Name of the mc1</description>
+			<page>
+				<crawlSequence>1</crawlSequence>
+				<fragmentXpath>//section[@id="category-section"]/aside/div</fragmentXpath>
+				<fieldXpath>.//h3/a[1]/text()</fieldXpath>
+			</page>
+		</field>
+		<field>
+			<name>mc1_link</name>
+			<description>Link for mc1</description>
+			<page>
+				<crawlSequence>1</crawlSequence>
+				<fragmentXpath>//section[@id="category-section"]/aside/div</fragmentXpath>
+				<fieldXpath>.//h3/a[1]/@href</fieldXpath>
+			</page>
+		<isCrawlUrl>
+				<crawlSequence>2</crawlSequence>
+		</isCrawlUrl>
+		</field>	
+		<field>
+			<name>mc2_name</name>
+			<description>Name of the mc2</description>
+			<page>
+				<crawlSequence>1</crawlSequence>
+				<fragmentXpath>//section[@id="category-section"]/aside/div</fragmentXpath>
+				<fieldXpath>.//h3/a[2]/text()</fieldXpath>
+			</page>
+		</field>
+		<field>
+			<name>mc2_link</name>
+			<description>Link for mc2</description>
+			<page>
+				<crawlSequence>1</crawlSequence>
+				<fragmentXpath>//section[@id="category-section"]/aside/div</fragmentXpath>
+				<fieldXpath>.//h3/a[2]/@href</fieldXpath>
+			</page>
+		<isCrawlUrl>
+				<crawlSequence>3</crawlSequence>
+		</isCrawlUrl>
+		</field>
+		<field>
+			<name>mc3_name</name>
+			<description>Name of the mc3</description>
+			<page>
+				<crawlSequence>1</crawlSequence>
+				<fragmentXpath>//section[@id="category-section"]/aside/div</fragmentXpath>
+				<fieldXpath>.//h3/a[3]/text()</fieldXpath>
+			</page>
+		</field>
+		<field>
+			<name>mc3_link</name>
+			<description>Link for mc3</description>
+			<page>
+				<crawlSequence>1</crawlSequence>
+				<fragmentXpath>//section[@id="category-section"]/aside/div</fragmentXpath>
+				<fieldXpath>.//h3/a[3]/@href</fieldXpath>
+			</page>
+		<isCrawlUrl>
+				<crawlSequence>4</crawlSequence>
+		</isCrawlUrl>
+		</field>
+		<field>
+			<name>mc1_lu</name>
+			<description>Last updated for mc1</description>
+			<page>
+				<crawlSequence>2</crawlSequence>
+				<fieldXpath>.//span[@class="last-update"]/text()</fieldXpath>
+			</page>
+		</field>
+		<field>
+			<name>mc2_lu</name>
+			<description>Last updated for mc2</description>
+			<page>
+				<crawlSequence>3</crawlSequence>
+				<fieldXpath>.//span[@class="last-update"]/text()</fieldXpath>
+			</page>
+		</field>
+		<field>
+			<name>mc3_lu</name>
+			<description>Last updated for mc3</description>
+			<page>
+				<crawlSequence>4</crawlSequence>
+				<fieldXpath>.//span[@class="last-update"]/text()</fieldXpath>
+			</page>
+		</field>
+		<field>
+			<name>main_cat_lu</name>
+			<description>Last updated for main cat</description>
+			<page>
+				<crawlSequence>5</crawlSequence>
+				<fieldXpath>.//span[@class="last-update"]/text()</fieldXpath>
+			</page>
+		</field>
+				<field>
+			<name>main_cat_fl_name</name>
+			<description>Name of the main cat first link</description>
+			<page>
+				<crawlSequence>5</crawlSequence>
+				<fieldXpath>(.//div[@class="cat-item"][1]/a/div)[1]/text()</fieldXpath>
+			</page>
+		</field>
+		<field>
+			<name>main_cat_fl_link</name>
+			<description>Link for main cat first link</description>
+			<page>
+				<crawlSequence>5</crawlSequence>
+				<fieldXpath>.//div[@class="cat-item"][1]/a/@href</fieldXpath>
+			</page>
+		<isCrawlUrl>
+				<crawlSequence>6</crawlSequence>
+		</isCrawlUrl>
+		</field>
+		<field>
+			<name>main_cat_fl_lu</name>
+			<description>Last updated for main cat first link</description>
+			<page>
+				<crawlSequence>6</crawlSequence>
+				<fieldXpath>.//span[@class="last-update"]/text()</fieldXpath>
+			</page>
+		</field>		
+	</item>
+</spider>

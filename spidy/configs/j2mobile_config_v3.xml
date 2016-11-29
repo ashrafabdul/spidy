@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spider>
+	<name>J2Mobile</name>
+	<description>This spider crawls for mobile devices on J2Mobile
+	</description>
+	<dbConfig>
+    <host>localhost</host>
+    <port>27017</port>
+    <db_name>test</db_name>
+    <collection_name>test</collection_name>
+  </dbConfig>
+	<item>
+		<name>Mobile</name>
+		<description>Item class mobile phones on J2Mobile</description>
+		<startUrl>http://www.j2mobileshop.com.sg/mobile-phones/</startUrl>
+		<field>
+			<name>name</name>
+			<description>Name of the mobile</description>
+			<page>
+				<crawlSequence>1</crawlSequence>
+				<fragmentXpath>//div[@class="col-xs-12 col-sm-6 col-md-3 mobiles mix "]</fragmentXpath>
+				<fieldXpath>.//h5/text()</fieldXpath>
+			</page>
+		</field>
+		<field>
+			<name>base_price</name>
+			<description>Base price of the mobile</description>
+			<page>
+				<crawlSequence>1</crawlSequence>
+				<fragmentXpath>//div[@class="col-xs-12 col-sm-6 col-md-3 mobiles mix "]</fragmentXpath>
+				<fieldXpath>.//div[@class="price-div"]/h3/text()</fieldXpath>
+			</page>
+		</field>
+		<field>
+			<name>image_thumb_link</name>
+			<description>Thumbnail image</description>
+			<page>
+				<crawlSequence>1</crawlSequence>
+				<fragmentXpath>//div[@class="col-xs-12 col-sm-6 col-md-3 mobiles mix "]</fragmentXpath>
+				<fieldXpath>.//img[@class=""]/@src</fieldXpath>
+			</page>
+		</field>
+		<field>
+			<name>product_page_link</name>
+			<description>Link to the product page</description>
+			<page>
+				<crawlSequence>1</crawlSequence>
+				<fragmentXpath>//div[@class="col-xs-12 col-sm-6 col-md-3 mobiles mix "]</fragmentXpath>
+				<fieldXpath>./div/a/@href</fieldXpath>
+			</page>
+			<isCrawlUrl>
+				<crawlSequence>2</crawlSequence>
+			</isCrawlUrl>
+		</field>
+		<field>
+			<name>colors</name>
+			<description>Colors of mobile</description>
+			<page>
+				<crawlSequence>2</crawlSequence>
+				<fieldXpath>//div[@class="colors"]/label/@alt</fieldXpath>
+			</page>
+		</field>
+		<field>
+			<name>alt_prices</name>
+			<description>Alternate prices for mobile</description>
+			<page>
+				<crawlSequence>2</crawlSequence>
+				<fieldXpath>//span[@class="pricevalue"]/text()</fieldXpath>
+			</page>
+		</field>
+		<paginations>
+			<pagination>
+				<crawlSequence>1</crawlSequence>
+				<xpath>//ol[@class="wp-paginate"]/li/a[@class="page"]/@href</xpath>
+				<description>Next pages for splash page /mobile-phones/
+				</description>
+			</pagination>
+		</paginations>
+	</item>
+</spider>

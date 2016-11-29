@@ -1,0 +1,100 @@
+<spider>
+  <name>tripadvisor</name>
+  <description>Get all Singapore hotel addresses from Trip advisor website</description>
+  <dbConfig>
+    <host>localhost</host>
+    <port>27017</port>
+    <db_name>test</db_name>
+    <collection_name>test</collection_name>
+  </dbConfig>
+  <!--1 or more repetitions:-->
+  <item>
+    <name>hotel</name>
+    <startUrl>https://www.tripadvisor.com.sg/Hotels-g294265-Singapore-Hotels.html</startUrl>
+    <!--1 or more repetitions:-->
+    <field>
+      <name>name</name>
+      <page>
+        <crawlSequence>1</crawlSequence>
+        <!--Optional:-->
+        <fragmentXpath>//*[@id="ACCOM_OVERVIEW"]//div[@class="listing easyClear  p13n_imperfect "]</fragmentXpath>
+        <fieldXpath>div[1]//a[@class="property_title "]/text()</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>hotel_page_url</name>
+      <page>
+        <crawlSequence>1</crawlSequence>
+        <!--Optional:-->
+        <fragmentXpath>//*[@id="ACCOM_OVERVIEW"]//div[@class="listing easyClear  p13n_imperfect "]</fragmentXpath>
+        <fieldXpath>div[1]//a[@class="property_title "]/@href</fieldXpath>
+      </page>
+      <isCrawlUrl>
+        <crawlSequence>2</crawlSequence>
+      </isCrawlUrl>
+    </field>
+
+    <field>
+      <name>tags</name>
+      <page>
+        <crawlSequence>1</crawlSequence>
+        <fragmentXpath>//*[@id="ACCOM_OVERVIEW"]//div[@class="listing easyClear  p13n_imperfect "]</fragmentXpath>
+        <fieldXpath>div[1]//div[@class="clickable_tags"]/a//text()</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>rating</name>
+      <page>
+        <crawlSequence>1</crawlSequence>
+        <fragmentXpath>//*[@id="ACCOM_OVERVIEW"]//div[@class="listing easyClear  p13n_imperfect "]</fragmentXpath>
+        <fieldXpath>div[1]//div[@class="prw_rup prw_common_bubble_rating"]/span/@alt</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>streetAddress</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//span[@property="streetAddress"]/text()</fieldXpath>
+      </page>
+    </field>
+    <field>
+      <name>addressLocality</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//span[@property="addressLocality"]/text()</fieldXpath>
+      </page>
+    </field>
+    <field>
+      <name>postalCode</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//span[@property="postalCode"]/text()</fieldXpath>
+      </page>
+    </field>
+    <field>
+      <name>addressCountry</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//span[@property="addressCountry"]/text()</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>addressRegion</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//span[@property="addressRegion"]/text()</fieldXpath>
+      </page>
+    </field>
+
+    <paginations>
+      <pagination>
+        <crawlSequence>1</crawlSequence>
+        <xpath>//div[@class="unified pagination standard_pagination"]//a/@href</xpath>
+      </pagination>
+    </paginations>
+  </item>
+</spider>

@@ -4,17 +4,9 @@ Created on Nov 10, 2016
 @author: AshrafAbdul
 '''
 
-from lxml import etree
-import sys, traceback
-
-
-
 # Generates item classes
 def generate_item_classes(items):
-    
     item_classes = []
-    
-    
     #1 Generate item class for each item
     for item in items:
         
@@ -39,9 +31,6 @@ def generate_item_classes(items):
     
     return item_classes
 
-
-    
-    
 def generate_spider_class(spider):
     spider_class = []
     start_requests_method = []
@@ -174,40 +163,36 @@ def generate_spider_class(spider):
     spider_class = spider_class + start_requests_method + item_parse_methods
     return spider_class
 
-if __name__ == '__main__':
-    
-    # Load XSD
-    with open('./spidy_config_v3.xsd', 'r') as f:
-        schema_root = etree.XML(f.read())
+def generate_pipeline_class(host, port, db_name, collection_name):
+    lines = []
+    lines.append("import pymongo\n")
+    lines.append("import datetime\n\n")
+    lines.append("class MongoPipeline(object):\n")
+    lines.append("\tdef __init__(self):\n")
+    lines.append("\t\tself.host = '{0}'\n".format(host))
+    lines.append("\t\tself.port = {0}\n".format(port))
+    lines.append("\t\tself.db_name = '{0}'\n".format(db_name))
+    lines.append("\t\tself.collection_name = '{0}'\n\n".format(collection_name))
 
-    schema = etree.XMLSchema(schema_root)
-    xmlparser = etree.XMLParser(schema=schema)
-    
-    # Load xml
-    try:
-        with open('./j2mobile_config_v3.xml', 'r') as f:
-            spider = etree.fromstring(f.read(), xmlparser)
-    except etree.XMLSchemaError:
-        print "XML validation failed"
-    
-    try:
-        #1. Open Spider File
-        name = spider.find('.//name').text
-        with open(name.lower()+'.py', 'w') as f:
-             
-            #2 import scrapy
-            f.write("import scrapy\n")
-             
-            #3 create classes for items
-            items = spider.findall('.//item')
-            lines = generate_item_classes(items)
-            for line in lines:
-                f.write(line)
-              
-            #4 create class for spider
-            lines = generate_spider_class(spider)
-            for line in lines:
-                f.write(line)
-             
-    except:
-        traceback.print_exc(file=sys.stdout)
+    lines.append("\tdef open_spider(self, spider):\n")
+    lines.append("\t\tself.client = pymongo.MongoClient(self.host, self.port)\n")
+    lines.append("\t\tself.db = self.client[self.db_name]\n\n")
+
+    lines.append("\tdef close_spider(self, spider):\n")
+    lines.append("\t\tself.client.close()\n\n")
+
+    lines.append("\tdef process_item(self, item, spider):\n")
+    lines.append("\t\titem = self.convert_keys_to_string(dict(item))\n")
+    lines.append("\t\titem['crawl_datetime'] = datetime.datetime.now()\n")
+    lines.append("\t\tself.db[self.collection_name].insert(item)\n")
+    lines.append("\t\treturn item\n\n")
+
+    lines.append("\tdef convert_keys_to_string(self, d):\n")
+    lines.append("\t\tr = {}\n")
+    lines.append("\t\tfor key in d:\n")
+    lines.append("\t\t\tif type(d[key]) is dict:\n")
+    lines.append("\t\t\t\tr[str(key)] = self.convert_keys_to_string(d[key])\n")
+    lines.append("\t\t\telse:\n")
+    lines.append("\t\t\t\tr[str(key)] = d[key]\n")
+    lines.append("\t\treturn r\n\n")
+    return lines
