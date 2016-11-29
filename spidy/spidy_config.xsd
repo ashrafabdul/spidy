@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<xsd:element name="spider" type="spiderType" />
-
 	<xsd:complexType name="spiderType">
 		<xsd:sequence>
 			<xsd:element name="name" type="xsd:string" maxOccurs="1"
 				minOccurs="1" />
 			<xsd:element name="description" type="xsd:string"
 				maxOccurs="1" minOccurs="1" />
+			<xsd:element name="dbConfig" type="dbConfig" maxOccurs="1" minOccurs="0"/>
 			<xsd:element name="item" type="itemType" maxOccurs="unbounded"
 				minOccurs="1" />
-
 		</xsd:sequence>
 	</xsd:complexType>
 
-
+	<xsd:complexType name="dbConfig">
+		<xsd:sequence>
+			<xsd:element name="host" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+			<xsd:element name="port" type="xsd:int" maxOccurs="1" minOccurs="1"/>
+			<xsd:element name="db_name" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+			<xsd:element name="collection_name" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
 
 	<xsd:complexType name="itemType">
 		<xsd:sequence>
@@ -28,7 +34,6 @@
 				minOccurs="1" />
 			<xsd:element name="paginations" type="paginationsType"
 				maxOccurs="1" minOccurs="0" />
-
 		</xsd:sequence>
 	</xsd:complexType>
 
@@ -36,23 +41,14 @@
 		<xsd:sequence>
 			<xsd:element name="name" type="xsd:string" maxOccurs="1"
 				minOccurs="1" />
-
 			<xsd:element name="description" type="xsd:string"
 				maxOccurs="1" minOccurs="0" />
-
 			<xsd:element name="page" type="pageType" maxOccurs="1"
 				minOccurs="1" />
 			<xsd:element name="isCrawlUrl" type="crawlUrlType"
 				maxOccurs="1" minOccurs="0" />
-
 		</xsd:sequence>
 	</xsd:complexType>
-
-
-
-
-
-
 
 	<xsd:complexType name="pageType">
 		<xsd:sequence>
@@ -62,13 +58,8 @@
 					maxOccurs="1" minOccurs="0" />
 				<xsd:element name="fieldXpath" type="xsd:string"
 					maxOccurs="1" minOccurs="1" />
-
 		</xsd:sequence>
-
-
 	</xsd:complexType>
-
-
 
 	<xsd:complexType name="paginationType">
 		<xsd:sequence>
