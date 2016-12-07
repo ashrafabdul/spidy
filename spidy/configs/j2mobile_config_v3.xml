@@ -6,8 +6,10 @@
 	<dbConfig>
     <host>localhost</host>
     <port>27017</port>
-    <db_name>test</db_name>
-    <collection_name>test</collection_name>
+    <username>scrapy</username>
+	<password>1234</password>
+    <db_name>crawl</db_name>
+    <collection_name>j2mobile</collection_name>
   </dbConfig>
 	<item>
 		<name>Mobile</name>

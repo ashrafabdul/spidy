@@ -163,7 +163,7 @@ def generate_spider_class(spider):
     spider_class = spider_class + start_requests_method + item_parse_methods
     return spider_class
 
-def generate_pipeline_class(host, port, db_name, collection_name):
+def generate_pipeline_class(host, port, user, pwd, db_name, collection_name):
     lines = []
     lines.append("import pymongo\n")
     lines.append("import datetime\n\n")
@@ -171,12 +171,15 @@ def generate_pipeline_class(host, port, db_name, collection_name):
     lines.append("\tdef __init__(self):\n")
     lines.append("\t\tself.host = '{0}'\n".format(host))
     lines.append("\t\tself.port = {0}\n".format(port))
+    lines.append("\t\tself.user = '{0}'\n".format(user))
+    lines.append("\t\tself.pwd = '{0}'\n".format(pwd))
     lines.append("\t\tself.db_name = '{0}'\n".format(db_name))
     lines.append("\t\tself.collection_name = '{0}'\n\n".format(collection_name))
 
     lines.append("\tdef open_spider(self, spider):\n")
     lines.append("\t\tself.client = pymongo.MongoClient(self.host, self.port)\n")
-    lines.append("\t\tself.db = self.client[self.db_name]\n\n")
+    lines.append("\t\tself.db = self.client[self.db_name]\n")
+    lines.append("\t\tself.db.authenticate(self.user, self.pwd)\n\n")
 
     lines.append("\tdef close_spider(self, spider):\n")
     lines.append("\t\tself.client.close()\n\n")

@@ -17,6 +17,8 @@
 		<xsd:sequence>
 			<xsd:element name="host" type="xsd:string" maxOccurs="1" minOccurs="1"/>
 			<xsd:element name="port" type="xsd:int" maxOccurs="1" minOccurs="1"/>
+			<xsd:element name="username" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+			<xsd:element name="password" type="xsd:string" maxOccurs="1" minOccurs="1"/>
 			<xsd:element name="db_name" type="xsd:string" maxOccurs="1" minOccurs="1"/>
 			<xsd:element name="collection_name" type="xsd:string" maxOccurs="1" minOccurs="1"/>
 		</xsd:sequence>

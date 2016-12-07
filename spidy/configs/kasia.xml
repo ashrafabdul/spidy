@@ -1,11 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <spider>
   <name>KasiaMobile</name>
   <description>Get all new mobile phones from the website.</description>
   <dbConfig>
     <host>localhost</host>
     <port>27017</port>
-    <db_name>test</db_name>
-    <collection_name>test</collection_name>
+    <username>scrapy</username>
+	<password>1234</password>
+    <db_name>crawl</db_name>
+    <collection_name>kasiamobile</collection_name>
   </dbConfig>
   <item>
     <name>Mobile</name>

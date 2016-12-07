@@ -83,6 +83,8 @@ if __name__ == '__main__':
         with open(output_path + name + '/' + name + '/' + 'pipelines.py', 'w+') as pipline_file:
             lines = generate.generate_pipeline_class(pipeline_config.find("host").text,
                                             pipeline_config.find("port").text,
+                                            pipeline_config.find("username").text,
+                                            pipeline_config.find("password").text,
                                             pipeline_config.find("db_name").text,
                                             pipeline_config.find("collection_name").text)
             for line in lines:
