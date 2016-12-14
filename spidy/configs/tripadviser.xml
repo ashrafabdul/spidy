@@ -1,34 +1,35 @@
 <spider>
-  <name>TripAdvisor</name>
-  <description>Get all Singapore hotel addresses from Trip advisor website</description>
+  <name>tripadviser</name>
+  <description>Get all Singapore hotel addresses from TripAdviser website</description>
   <dbConfig>
     <host>localhost</host>
     <port>27017</port>
-	<username>scrapy</username>
-	<password>1234</password>
-    <db_name>crawl</db_name>
-    <collection_name>tripadvisor</collection_name>
+    <username>scrapy</username>
+    <password>1234</password>
+    <dbName>crawl</dbName>
+    <collectionName>TripAdviser</collectionName>
   </dbConfig>
-  <!--1 or more repetitions:-->
   <item>
     <name>hotel</name>
     <startUrl>https://www.tripadvisor.com.sg/Hotels-g294265-Singapore-Hotels.html</startUrl>
-    <!--1 or more repetitions:-->
+	<onDuplicate>update</onDuplicate>
+    <keys>
+		<key>name</key>
+	</keys>
+
     <field>
       <name>name</name>
       <page>
         <crawlSequence>1</crawlSequence>
-        <!--Optional:-->
         <fragmentXpath>//*[@id="ACCOM_OVERVIEW"]//div[@class="listing easyClear  p13n_imperfect "]</fragmentXpath>
         <fieldXpath>div[1]//a[@class="property_title "]/text()</fieldXpath>
       </page>
     </field>
-
+	
     <field>
       <name>hotel_page_url</name>
       <page>
         <crawlSequence>1</crawlSequence>
-        <!--Optional:-->
         <fragmentXpath>//*[@id="ACCOM_OVERVIEW"]//div[@class="listing easyClear  p13n_imperfect "]</fragmentXpath>
         <fieldXpath>div[1]//a[@class="property_title "]/@href</fieldXpath>
       </page>

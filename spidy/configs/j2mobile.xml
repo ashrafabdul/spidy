@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spider>
 	<name>J2Mobile</name>
-	<description>This spider crawls for mobile devices on J2Mobile
-	</description>
+	<description>This spider crawls for mobile devices on J2Mobile</description>
 	<dbConfig>
     <host>localhost</host>
     <port>27017</port>
     <username>scrapy</username>
 	<password>1234</password>
-    <db_name>crawl</db_name>
-    <collection_name>j2mobile</collection_name>
+    <dbName>crawl</dbName>
+    <collectionName>j2mobile</collectionName>
   </dbConfig>
 	<item>
 		<name>Mobile</name>
 		<description>Item class mobile phones on J2Mobile</description>
 		<startUrl>http://www.j2mobileshop.com.sg/mobile-phones/</startUrl>
+		<onDuplicate>update</onDuplicate>
+		<keys>
+			<key>name</key>
+		</keys>
 		<field>
 			<name>name</name>
 			<description>Name of the mobile</description>

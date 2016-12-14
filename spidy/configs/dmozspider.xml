@@ -7,13 +7,19 @@
     <port>27017</port>
     <username>scrapy</username>
 	<password>1234</password>
-    <db_name>crawl</db_name>
-    <collection_name>dmoz</collection_name>
+    <dbName>crawl</dbName>
+    <collectionName>Dmoz</collectionName>
   </dbConfig>
 	<item>
 		<name>Categories</name>
 		<description>Item class for categories</description>
 		<startUrl>http://www.dmoz.org/</startUrl>
+		<onDuplicate>update</onDuplicate>
+		<keys>
+			<key>mc1_name</key>
+			<key>mc2_name</key>
+			<key>mc3_name</key>
+		</keys>
 		<field>
 			<name>main_cat_name</name>
 			<description>Name of the main category</description>

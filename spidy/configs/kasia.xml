@@ -7,13 +7,17 @@
     <port>27017</port>
     <username>scrapy</username>
 	<password>1234</password>
-    <db_name>crawl</db_name>
-    <collection_name>kasiamobile</collection_name>
+    <dbName>crawl</dbName>
+    <collectionName>kasiamobile</collectionName>
   </dbConfig>
   <item>
     <name>Mobile</name>
     <description>A mobile from Kasia website.</description>
     <startUrl>http://kasiamobile.com/</startUrl>
+    <onDuplicate>update</onDuplicate>
+    <keys>
+		<key>Model</key>
+	</keys>
     <field>
       <name>Category</name>
       <page>

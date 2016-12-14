@@ -5,7 +5,7 @@ import ConfigParser
 import generate
 
 
-#Add Mongodb pipeline to scrapy project setting
+# Add Mongodb pipeline to scrapy project setting
 def edit_project_mongodb_pipeline_setting(name, file):
     with open(file, 'a+') as f:
         f.write("\nITEM_PIPELINES = {'" + name + ".pipelines.MongoPipeline': 300}")
@@ -43,50 +43,62 @@ if __name__ == '__main__':
         print "Could not load xsd file"
         sys.exit(1)
 
-    schema = etree.XMLSchema(schema_root)
-    xmlparser = etree.XMLParser(schema=schema)
-    # Load xml
     try:
-        with open(config_path + str(sys.argv[1]), 'r') as f:
-            spider = etree.fromstring(f.read(), xmlparser)
-    except etree.XMLSyntaxError:
-        print "XML validation failed"
+        schema = etree.XMLSchema(schema_root)
+        xmlparser = etree.XMLParser(schema=schema)
+        # Load xml
+        try:
+            with open(config_path + str(sys.argv[1]), 'r') as f:
+                spider = etree.fromstring(f.read(), xmlparser)
+        except etree.XMLSyntaxError as e:
+            print "XML validation failed. \nCaused: " + e.message
+            sys.exit(1)
+    except etree.XMLSchemaParseError as e:
+        print "XML schema parse error. \nCaused: " + e.message
         sys.exit(1)
 
-    #1. Open Spider File
+    # 1. Open Spider File
     name = spider.find('.//name').text.lower()
 
-    #create a project
+    # create a project
     if create_project(name, output_path+name) != 0:
         sys.exit(1)
 
-    #generate spider file
+    # generate spider file
     with open(output_path + name + '/' + name + '/spiders/' + name +'.py', 'w+') as f:
 
-        #2 import scrapy
+        # 2 import scrapy
         f.write("import scrapy\n")
 
-        #3 create classes for items
+        # 3 create classes for items
         items = spider.findall('.//item')
         lines = generate.generate_item_classes(items)
         for line in lines:
             f.write(line)
 
-        #4 create class for spider
+        # 4 create class for spider
         lines = generate.generate_spider_class(spider)
         for line in lines:
             f.write(line)
 
-    #5 create Mongo pipeline file
-    pipeline_config = spider.find("dbConfig")
-    if (pipeline_config is not None):
+    # 5 create Mongo pipeline file
+    db_configs = spider.find("dbConfig")
+
+    # get keys from config file
+    keys = list()
+    for key in spider.find("item").find("keys").findall("key"):
+        keys.append(key.text)
+
+    if db_configs is not None:
         with open(output_path + name + '/' + name + '/' + 'pipelines.py', 'w+') as pipline_file:
-            lines = generate.generate_pipeline_class(pipeline_config.find("host").text,
-                                            pipeline_config.find("port").text,
-                                            pipeline_config.find("username").text,
-                                            pipeline_config.find("password").text,
-                                            pipeline_config.find("db_name").text,
-                                            pipeline_config.find("collection_name").text)
+            lines = generate.generate_pipeline_class(db_configs.find("host").text,
+                                                     db_configs.find("port").text,
+                                                     db_configs.find("username").text,
+                                                     db_configs.find("password").text,
+                                                     db_configs.find("dbName").text,
+                                                     db_configs.find("collectionName").text,
+                                                     spider.find("item").find("onDuplicate").text,
+                                                     keys)
             for line in lines:
                 pipline_file.write(line)
 

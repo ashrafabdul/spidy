@@ -19,8 +19,8 @@
 			<xsd:element name="port" type="xsd:int" maxOccurs="1" minOccurs="1"/>
 			<xsd:element name="username" type="xsd:string" maxOccurs="1" minOccurs="1"/>
 			<xsd:element name="password" type="xsd:string" maxOccurs="1" minOccurs="1"/>
-			<xsd:element name="db_name" type="xsd:string" maxOccurs="1" minOccurs="1"/>
-			<xsd:element name="collection_name" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+			<xsd:element name="dbName" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+			<xsd:element name="collectionName" type="xsd:string" maxOccurs="1" minOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 
@@ -32,10 +32,27 @@
 				maxOccurs="1" minOccurs="0" />
 			<xsd:element name="startUrl" type="xsd:string" maxOccurs="1"
 				minOccurs="1" />
+			<xsd:element name="onDuplicate" type="duplicateAction" maxOccurs="1"
+				minOccurs="1" />
+			<xsd:element name="keys" type="keyType" maxOccurs="1" minOccurs="1" />
 			<xsd:element name="field" type="fieldType" maxOccurs="unbounded"
 				minOccurs="1" />
 			<xsd:element name="paginations" type="paginationsType"
 				maxOccurs="1" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:simpleType name="duplicateAction">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="stop"/>
+			<xsd:enumeration value="update"/>
+			<xsd:enumeration value="ignore"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:complexType name="keyType">
+		<xsd:sequence>
+			<xsd:element name="key" type="xsd:string" maxOccurs="unbounded" minOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
 
