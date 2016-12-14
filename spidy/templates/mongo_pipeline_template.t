@@ -1,7 +1,9 @@
 import pymongo
 import datetime
 import logging
+import settings
 from scrapy import signals
+
 
 class MongoPipeline(object):
     def __init__(self):
@@ -43,7 +45,7 @@ class MongoPipeline(object):
             if self.on_duplicate == 'stop':
                 spider.crawler.engine.close_spider(self, 'Duplicated item found.')
             elif self.on_duplicate == 'update':
-                self.db[self.collection_name].update(key_filter, {'$set': item}, multi=True)
+                self.db[self.collection_name].update(key_filter, {{'$set': item}}, multi=True)
                 spider.crawler.stats.inc_value('update_item_count')
             elif self.on_duplicate == 'ignore':
                 pass
@@ -54,7 +56,6 @@ class MongoPipeline(object):
             spider.crawler.stats.inc_value('insert_item_count')
 
     def _store_stats(self, spider):
-        logging.warning("storing")
         try:
             spider._job
         except AttributeError:
@@ -62,9 +63,10 @@ class MongoPipeline(object):
         else:
             stats = spider.crawler.stats.get_stats()
             stats['_id'] = spider._job
+            stats['project'] = settings.BOT_NAME
+            stats['spider'] = spider.name
             self._select_stat_db()
             self.db['crawl_stats'].insert(stats)
-        logging.warning("stored")
 
     def _select_data_db(self):
         self.db = self.client[self.db_data_name]
@@ -85,7 +87,7 @@ class MongoPipeline(object):
         return key_filter
 
     def _convert_keys_to_string(self, d):
-        r = {}
+        r = {{}}
         for key in d:
             if type(d[key]) is dict:
                 r[str(key)] = self._convert_keys_to_string(d[key])
