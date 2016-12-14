@@ -91,7 +91,7 @@ if __name__ == '__main__':
 
     if db_configs is not None:
         with open(output_path + name + '/' + name + '/' + 'pipelines.py', 'w+') as pipline_file:
-            lines = generate.generate_pipeline_class(db_configs.find("host").text,
+            pipeline_content = generate.generate_pipeline_class(db_configs.find("host").text,
                                                      db_configs.find("port").text,
                                                      db_configs.find("username").text,
                                                      db_configs.find("password").text,
@@ -99,8 +99,7 @@ if __name__ == '__main__':
                                                      db_configs.find("collectionName").text,
                                                      spider.find("item").find("onDuplicate").text,
                                                      keys)
-            for line in lines:
-                pipline_file.write(line)
+            pipline_file.write(pipeline_content)
 
     edit_project_mongodb_pipeline_setting(name, output_path + name + '/' + name + '/' + 'settings.py')
     edit_project_setting(config_deploy_url, output_path + name + '/' + "scrapy.cfg")

@@ -158,62 +158,16 @@ def generate_spider_class(spider):
     return spider_class
 
 
-def generate_pipeline_class(host, port, user, pwd, db_name, collection_name, on_dup, keys):
-    lines = list()
-    lines.append("import pymongo\n")
-    lines.append("import datetime\n\n\n")
-    lines.append("class MongoPipeline(object):\n\n")
-    lines.append("\tdef __init__(self):\n")
-    lines.append("\t\tself.host = '{0}'\n".format(host))
-    lines.append("\t\tself.port = {0}\n".format(port))
-    lines.append("\t\tself.user = '{0}'\n".format(user))
-    lines.append("\t\tself.pwd = '{0}'\n".format(pwd))
-    lines.append("\t\tself.db_name = '{0}'\n".format(db_name))
-    lines.append("\t\tself.on_duplicate = '{0}'\n".format(on_dup))
-    lines.append("\t\tself.collection_name = '{0}'\n".format(collection_name))
-    lines.append("\t\tself.keys = [")
-    for key in keys:
-        lines.append(" '{0}',".format(key))
-    lines.append("]\n\n")
-
-    lines.append("\tdef open_spider(self, spider):\n")
-    lines.append("\t\tself.client = pymongo.MongoClient(self.host, self.port)\n")
-    lines.append("\t\tself.db = self.client[self.db_name]\n")
-    lines.append("\t\tself.db.authenticate(self.user, self.pwd)\n\n")
-
-    lines.append("\tdef close_spider(self, spider):\n")
-    lines.append("\t\tself.client.close()\n\n")
-
-    lines.append("\tdef process_item(self, item, spider):\n")
-    lines.append("\t\titem = self._convert_keys_to_string(dict(item))\n")
-    lines.append("\t\titem['crawl_datetime'] = datetime.datetime.now()\n")
-    lines.append("\t\tself.store(item, spider)\n")
-    lines.append("\t\treturn item\n\n")
-
-    lines.append("\tdef store(self, item, spider):\n")
-    lines.append("\t\tfilter = self._getFilter(item)\n")
-    lines.append("\t\tif self.db[self.collection_name].find(filter).count() > 0:\n")
-    lines.append("\t\t\tif self.on_duplicate == 'stop':\n")
-    lines.append("\t\t\t\tspider.crawler.engine.close_spider(self, 'Duplicated item found.')\n")
-    lines.append("\t\t\telif self.on_duplicate == 'update':\n")
-    lines.append("\t\t\t\tself.db[self.collection_name].update(filter, {'$set': item }, multi=True)\n")
-    lines.append("\t\t\telif self.on_duplicate == 'ignore': pass\n")
-    lines.append("\t\t\telse : raise ValueError('Invalid on duplicate action.')\n")
-    lines.append("\t\telse:\n")
-    lines.append("\t\t\tself.db[self.collection_name].insert(item)\n\n")
-
-    lines.append("\tdef _getFilter(self,item):\n")
-    lines.append("\t\tfilter = dict()\n")
-    lines.append("\t\tfor key in self.keys:\n")
-    lines.append("\t\t\tfilter[key] = item[key]\n")
-    lines.append("\t\treturn filter\n\n")
-
-    lines.append("\tdef _convert_keys_to_string(self, d):\n")
-    lines.append("\t\tr = {}\n")
-    lines.append("\t\tfor key in d:\n")
-    lines.append("\t\t\tif type(d[key]) is dict:\n")
-    lines.append("\t\t\t\tr[str(key)] = self._convert_keys_to_string(d[key])\n")
-    lines.append("\t\t\telse:\n")
-    lines.append("\t\t\t\tr[str(key)] = d[key]\n")
-    lines.append("\t\treturn r\n\n")
-    return lines
+def generate_pipeline_class(host, port, user, pwd, db_name, coll_name, on_dup, keys):
+    with open('templates/mongo_pipeline_template.t', 'r') as template_file:
+        template = template_file.read()
+        key_string = ""
+        for key in keys: key_string += " '{0}', ".format(key)
+        return template.format(host=host,
+                               port=port,
+                               user=user,
+                               pwd=pwd,
+                               db_name=db_name,
+                               on_dup=on_dup,
+                               coll_name=coll_name,
+                               keys=key_string)
