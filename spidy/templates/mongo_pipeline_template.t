@@ -29,6 +29,7 @@ class MongoPipeline(object):
         try: self.job_id = spider._job
         except AttributeError: self.job_id = str(uuid.uuid4())
         self._init_stats(spider)
+        self._store_stats(spider)
 
     def process_item(self, item, spider):
         item = self._convert_keys_to_string(dict(item))
@@ -54,9 +55,9 @@ class MongoPipeline(object):
             else:
                 raise ValueError('Invalid on duplicate action.')
         else:
-
             self.db[self.collection_name].insert(item)
             spider.crawler.stats.inc_value('insert_item_count')
+            self._store_stats(spider)
 
     def _store_stats(self, spider):
         stats = spider.crawler.stats.get_stats()
@@ -64,7 +65,7 @@ class MongoPipeline(object):
         stats['project'] = settings.BOT_NAME
         stats['spider'] = spider.name
         self._select_stat_db()
-        self.db['crawl_stats'].insert(stats)
+        self.db['crawl_stats'].find_and_modify(query={{'_id': self.job_id}}, update=stats, upsert=True)
 
     def _select_data_db(self):
         self.db = self.client[self.db_data_name]
