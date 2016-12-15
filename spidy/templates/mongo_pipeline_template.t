@@ -2,6 +2,7 @@ import pymongo
 import datetime
 import logging
 import settings
+import uuid
 from scrapy import signals
 
 
@@ -17,6 +18,9 @@ class MongoPipeline(object):
         self.collection_name = '{coll_name}'
         self.keys = [{keys}]
         self.client = pymongo.MongoClient(self.host, self.port)
+
+        try: self.job_id = spider._job
+        except AttributeError: self.job_id = str(uuid.uuid4())
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -56,17 +60,12 @@ class MongoPipeline(object):
             spider.crawler.stats.inc_value('insert_item_count')
 
     def _store_stats(self, spider):
-        try:
-            spider._job
-        except AttributeError:
-            logging.warning("Cannot log to database, no job id")
-        else:
-            stats = spider.crawler.stats.get_stats()
-            stats['_id'] = spider._job
-            stats['project'] = settings.BOT_NAME
-            stats['spider'] = spider.name
-            self._select_stat_db()
-            self.db['crawl_stats'].insert(stats)
+        stats = spider.crawler.stats.get_stats()
+        stats['_id'] = self.job_id
+        stats['project'] = settings.BOT_NAME
+        stats['spider'] = spider.name
+        self._select_stat_db()
+        self.db['crawl_stats'].insert(stats)
 
     def _select_data_db(self):
         self.db = self.client[self.db_data_name]
