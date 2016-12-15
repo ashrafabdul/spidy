@@ -3,14 +3,25 @@ import sys
 from subprocess import call
 import ConfigParser
 import generate
+import fileinput
+import re
 
 
 # Add Mongodb pipeline to scrapy project setting
-def edit_project_mongodb_pipeline_setting(name, file):
-    with open(file, 'a+') as f:
-        f.write("\nITEM_PIPELINES = {'" + name + ".pipelines.MongoPipeline': 300}")
+def edit_spider_setting(name, setting_file):
+    for line in fileinput.input(setting_file, inplace=True):
+        if re.match("^\s*ROBOTSTXT_OBEY\s*=\s*.*$", line):
+            print "ROBOTSTXT_OBEY = False"
+        else:
+            print line
 
-def edit_project_setting(url, file):
+    setting = "\n\nITEM_PIPELINES = {\n\t'" + name + ".pipelines.MongoPipeline': 300\n}\n\n"
+    setting += "EXTENSIONS = {\n\t'scrapy.extensions.feedexport.FeedExporter': None \n}\n\n"
+    with open(setting_file, 'a+') as f:
+        f.write(setting)
+
+
+def edit_scrapy_setting(url, file):
     with open(file, 'a+') as f:
         f.write("url = " + url)
     lines = []
@@ -21,8 +32,10 @@ def edit_project_setting(url, file):
         for line in lines:
             outfile.write(line)
 
+
 def create_project(name, path):
     return call(['scrapy', 'startproject', name, path])
+
 
 def get_configs():
     config = ConfigParser.ConfigParser()
@@ -101,5 +114,5 @@ if __name__ == '__main__':
                                                      keys)
             pipline_file.write(pipeline_content)
 
-    edit_project_mongodb_pipeline_setting(name, output_path + name + '/' + name + '/' + 'settings.py')
-    edit_project_setting(config_deploy_url, output_path + name + '/' + "scrapy.cfg")
+    edit_spider_setting(name, output_path + name + '/' + name + '/' + 'settings.py')
+    edit_scrapy_setting(config_deploy_url, output_path + name + '/' + "scrapy.cfg")
