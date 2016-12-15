@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spider>
+  <name>JobStreet</name>
+  <description>A spider that crawls all jobs from Job Street website.</description>
+  <dbConfig>
+    <host>localhost</host>
+    <port>27017</port>
+    <username>scrapy</username>
+    <password>1234</password>
+    <dbName>crawl</dbName>
+    <collectionName>JobStreet</collectionName>
+  </dbConfig>
+  <item>
+    <name>Job</name>
+    <description>A job</description>
+    <startUrl><![CDATA[http://www.jobstreet.com.sg/en/job-search/job-vacancy.php?src=16&ojs=6]]></startUrl>
+    <onDuplicate>update</onDuplicate>
+    <keys>
+      <key>JobLink</key>
+    </keys>
+
+    <field>
+      <name>JobName</name>
+      <page>
+        <crawlSequence>1</crawlSequence>
+        <fragmentXpath>//*[@id="job_listing_panel"]/div[@class="panel "]</fragmentXpath>
+        <fieldXpath>.//h2[@itemprop="title"]/text()</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>JobLink</name>
+      <page>
+        <crawlSequence>1</crawlSequence>
+        <fragmentXpath>//*[@id="job_listing_panel"]/div[@class="panel "]</fragmentXpath>
+        <fieldXpath>.//a[@class="position-title-link"]/@href</fieldXpath>
+      </page>
+      <isCrawlUrl>
+        <crawlSequence>2</crawlSequence>
+      </isCrawlUrl>
+    </field>
+
+    <field>
+      <name>ExpReq</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//*[@id="years_of_experience"]/text()</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>CompanyName</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//*[@id="company_name"]//text()</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>WorkLocation</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//*[@id="single_work_location"]/text()</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>Address</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//*[@id="address"]/text()</fieldXpath>
+      </page>
+    </field>
+
+
+    <field>
+      <name>JobDescription</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//*[@id="job_description"]//text()</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>Industry</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//*[@id="company_industry"]/text()</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>TelNumber</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//*[@id="company_contact"]/text()</fieldXpath>
+      </page>
+    </field>
+
+
+    <field>
+      <name>CompanyLogo</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//*[@id="company_logo"]/@data-original</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>PostingDate</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//*[@id="posting_date"]/span/text()</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>ClosingDate</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//*[@id="closing_date"]/text()</fieldXpath>
+      </page>
+    </field>
+
+    <paginations>
+      <pagination>
+        <crawlSequence>1</crawlSequence>
+        <xpath>//ul[@id="pagination_panel"]//a/@href</xpath>
+      </pagination>
+    </paginations>
+  </item>
+</spider>

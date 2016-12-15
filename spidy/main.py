@@ -51,10 +51,10 @@ if __name__ == '__main__':
             with open(config_path + str(sys.argv[1]), 'r') as f:
                 spider = etree.fromstring(f.read(), xmlparser)
         except etree.XMLSyntaxError as e:
-            print "XML validation failed. \nCaused: " + e.message
+            print "XML validation failed. \nCause: " + e.message
             sys.exit(1)
     except etree.XMLSchemaParseError as e:
-        print "XML schema parse error. \nCaused: " + e.message
+        print "XML schema parse error. \nCause: " + e.message
         sys.exit(1)
 
     # 1. Open Spider File
