@@ -19,9 +19,6 @@ class MongoPipeline(object):
         self.keys = [{keys}]
         self.client = pymongo.MongoClient(self.host, self.port)
 
-        try: self.job_id = spider._job
-        except AttributeError: self.job_id = str(uuid.uuid4())
-
     @classmethod
     def from_crawler(cls, crawler):
         pipeline = cls()
@@ -29,8 +26,9 @@ class MongoPipeline(object):
         return pipeline
 
     def open_spider(self, spider):
+        try: self.job_id = spider._job
+        except AttributeError: self.job_id = str(uuid.uuid4())
         self._init_stats(spider)
-        self._select_data_db()
 
     def process_item(self, item, spider):
         item = self._convert_keys_to_string(dict(item))
@@ -39,15 +37,15 @@ class MongoPipeline(object):
         return item
 
     def spider_closed(self, spider):
-        self._select_stat_db()
         self._store_stats(spider)
         self.client.close()
 
     def _store_item(self, item, spider):
         key_filter = self._get_key_filter(item)
+        self._select_data_db()
         if self.db[self.collection_name].find(key_filter).count() > 0:
             if self.on_duplicate == 'stop':
-                spider.crawler.engine.close_spider(self, 'Duplicated item found.')
+                spider.crawler.engine.close_spider(spider, 'Duplicated item found.')
             elif self.on_duplicate == 'update':
                 self.db[self.collection_name].update(key_filter, {{'$set': item}}, multi=True)
                 spider.crawler.stats.inc_value('update_item_count')
@@ -56,6 +54,7 @@ class MongoPipeline(object):
             else:
                 raise ValueError('Invalid on duplicate action.')
         else:
+
             self.db[self.collection_name].insert(item)
             spider.crawler.stats.inc_value('insert_item_count')
 
@@ -69,11 +68,9 @@ class MongoPipeline(object):
 
     def _select_data_db(self):
         self.db = self.client[self.db_data_name]
-        self.db.authenticate(self.user, self.pwd)
 
     def _select_stat_db(self):
         self.db = self.client[self.db_stat_name]
-        self.db.authenticate(self.user, self.pwd)
 
     def _init_stats(self, spider):
         spider.crawler.stats.set_value('update_item_count', 0)
