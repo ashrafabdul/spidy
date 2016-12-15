@@ -114,7 +114,7 @@ def generate_spider_class(spider):
                 if fragment_xpath is not None:
                     fragment_code.append('\t\t\ti['+'\''+field_name+'\''+'] = fragment.xpath('+'\''+field_xpath+'\''+').extract()\n')
                 else:
-                    direct_code.append('\t\ti['+'\''+field_name+'\''+'] = response.xpath('+'\''+field_xpath+'\''+').extract()\n')
+                    direct_code.append('\t\ti[' + '\'' + field_name + '\'' + '] = [ x.strip() for x in response.xpath(' + '\'' + field_xpath + '\'' + ').extract() if x.strip() ]\n')
             
                 if is_crawl_url is not None:
                     next_sequence = is_crawl_url.find('.//crawlSequence').text

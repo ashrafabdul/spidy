@@ -3,13 +3,10 @@
 	<xsd:element name="spider" type="spiderType" />
 	<xsd:complexType name="spiderType">
 		<xsd:sequence>
-			<xsd:element name="name" type="xsd:string" maxOccurs="1"
-				minOccurs="1" />
-			<xsd:element name="description" type="xsd:string"
-				maxOccurs="1" minOccurs="1" />
+			<xsd:element name="name" type="xsd:string" maxOccurs="1" minOccurs="1" />
+			<xsd:element name="description" type="xsd:string" maxOccurs="1" minOccurs="1" />
 			<xsd:element name="dbConfig" type="dbConfig" maxOccurs="1" minOccurs="0"/>
-			<xsd:element name="item" type="itemType" maxOccurs="unbounded"
-				minOccurs="1" />
+			<xsd:element name="item" type="itemType" maxOccurs="unbounded" minOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
 
@@ -26,19 +23,13 @@
 
 	<xsd:complexType name="itemType">
 		<xsd:sequence>
-			<xsd:element name="name" type="xsd:string" maxOccurs="1"
-				minOccurs="1" />
-			<xsd:element name="description" type="xsd:string"
-				maxOccurs="1" minOccurs="0" />
-			<xsd:element name="startUrl" type="xsd:string" maxOccurs="1"
-				minOccurs="1" />
-			<xsd:element name="onDuplicate" type="duplicateAction" maxOccurs="1"
-				minOccurs="1" />
+			<xsd:element name="name" type="xsd:string" maxOccurs="1" minOccurs="1" />
+			<xsd:element name="description" type="xsd:string" maxOccurs="1" minOccurs="0" />
+			<xsd:element name="startUrl" type="xsd:string" maxOccurs="1" minOccurs="1" />
+			<xsd:element name="onDuplicate" type="duplicateAction" maxOccurs="1" minOccurs="1" />
 			<xsd:element name="keys" type="keyType" maxOccurs="1" minOccurs="1" />
-			<xsd:element name="field" type="fieldType" maxOccurs="unbounded"
-				minOccurs="1" />
-			<xsd:element name="paginations" type="paginationsType"
-				maxOccurs="1" minOccurs="0" />
+			<xsd:element name="field" type="fieldType" maxOccurs="unbounded" minOccurs="1" />
+			<xsd:element name="paginations" type="paginationsType" maxOccurs="1" minOccurs="0" />
 		</xsd:sequence>
 	</xsd:complexType>
 
@@ -58,50 +49,38 @@
 
 	<xsd:complexType name="fieldType">
 		<xsd:sequence>
-			<xsd:element name="name" type="xsd:string" maxOccurs="1"
-				minOccurs="1" />
-			<xsd:element name="description" type="xsd:string"
-				maxOccurs="1" minOccurs="0" />
-			<xsd:element name="page" type="pageType" maxOccurs="1"
-				minOccurs="1" />
-			<xsd:element name="isCrawlUrl" type="crawlUrlType"
-				maxOccurs="1" minOccurs="0" />
+			<xsd:element name="name" type="xsd:string" maxOccurs="1" minOccurs="1" />
+			<xsd:element name="description" type="xsd:string" maxOccurs="1" minOccurs="0" />
+			<xsd:element name="page" type="pageType" maxOccurs="1" minOccurs="1" />
+			<xsd:element name="isCrawlUrl" type="crawlUrlType" maxOccurs="1" minOccurs="0" />
 		</xsd:sequence>
 	</xsd:complexType>
 
 	<xsd:complexType name="pageType">
 		<xsd:sequence>
-			<xsd:element name="crawlSequence" type="xsd:string"
-				maxOccurs="1" minOccurs="1" />
-				<xsd:element name="fragmentXpath" type="xsd:string"
-					maxOccurs="1" minOccurs="0" />
-				<xsd:element name="fieldXpath" type="xsd:string"
-					maxOccurs="1" minOccurs="1" />
+			<xsd:element name="crawlSequence" type="xsd:string" maxOccurs="1" minOccurs="1" />
+				<xsd:element name="fragmentXpath" type="xsd:string" maxOccurs="1" minOccurs="0" />
+				<xsd:element name="fieldXpath" type="xsd:string" maxOccurs="1" minOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
 
 	<xsd:complexType name="paginationType">
 		<xsd:sequence>
-			<xsd:element name="crawlSequence" type="xsd:string"
-				maxOccurs="1" minOccurs="1" />
-			<xsd:element name="xpath" type="xsd:string" maxOccurs="1"
-				minOccurs="1" />
-			<xsd:element name="description" type="xsd:string"
-				maxOccurs="1" minOccurs="0" />
+			<xsd:element name="crawlSequence" type="xsd:string" maxOccurs="1" minOccurs="1" />
+			<xsd:element name="xpath" type="xsd:string" maxOccurs="1" minOccurs="1" />
+			<xsd:element name="description" type="xsd:string" maxOccurs="1" minOccurs="0" />
 		</xsd:sequence>
 	</xsd:complexType>
 
 	<xsd:complexType name="crawlUrlType">
 		<xsd:sequence>
-			<xsd:element name="crawlSequence" type="xsd:string"
-				maxOccurs="1" minOccurs="1" />
+			<xsd:element name="crawlSequence" type="xsd:string" maxOccurs="1" minOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
 
 	<xsd:complexType name="paginationsType">
 		<xsd:sequence>
-			<xsd:element name="pagination" type="paginationType"
-				maxOccurs="unbounded" minOccurs="1" />
+			<xsd:element name="pagination" type="paginationType" maxOccurs="unbounded" minOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
 </xsd:schema>
