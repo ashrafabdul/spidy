@@ -27,7 +27,7 @@ class MongoPipeline(object):
 
     def open_spider(self, spider):
         try: self.job_id = spider._job
-        except AttributeError: self.job_id = str(uuid.uuid4())
+        except AttributeError: self.job_id = uuid.uuid1().hex
         self._init_stats(spider)
         self._store_stats(spider)
 
