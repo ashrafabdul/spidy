@@ -2,14 +2,15 @@
 <spider>
 	<name>J2Mobile</name>
 	<description>This spider crawls for mobile devices on J2Mobile</description>
+	<splashUrl>http://192.168.99.100:8050</splashUrl>
 	<dbConfig>
-    <host>localhost</host>
-    <port>27017</port>
-    <username>scrapy</username>
-	<password>1234</password>
-    <dbName>crawl</dbName>
-    <collectionName>j2mobile</collectionName>
-  </dbConfig>
+		<host>localhost</host>
+		<port>27017</port>
+		<username>scrapy</username>
+		<password>1234</password>
+		<dbName>crawl</dbName>
+		<collectionName>j2mobile</collectionName>
+  	</dbConfig>
 	<item>
 		<name>Mobile</name>
 		<description>Item class mobile phones on J2Mobile</description>

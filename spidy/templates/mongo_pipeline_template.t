@@ -64,6 +64,7 @@ class MongoPipeline(object):
         stats['_id'] = self.job_id
         stats['project'] = settings.BOT_NAME
         stats['spider'] = spider.name
+        stats = self._removeDotFromKey(stats)
         self._select_stat_db()
         self.db['crawl_stats'].find_and_modify(query={{'_id': self.job_id}}, update=stats, upsert=True)
 
@@ -82,6 +83,13 @@ class MongoPipeline(object):
         for key in self.keys:
             key_filter[key] = item[key]
         return key_filter
+
+    def _removeDotFromKey(self, stats):
+        for key in stats:
+            if '.' in key:
+                new_key = key.replace('.', '_')
+                stats[new_key] = stats.pop(key)
+        return stats
 
     def _convert_keys_to_string(self, d):
         r = {{}}

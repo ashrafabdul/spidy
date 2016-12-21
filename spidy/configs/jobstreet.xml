@@ -2,6 +2,7 @@
 <spider>
   <name>JobStreet</name>
   <description>A spider that crawls all jobs from Job Street website.</description>
+  <splashUrl>http://192.168.99.100:8050</splashUrl>
   <dbConfig>
     <host>localhost</host>
     <port>27017</port>

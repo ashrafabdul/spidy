@@ -1,6 +1,7 @@
 <spider>
   <name>tripadviser</name>
   <description>Get all Singapore hotel addresses from TripAdviser website</description>
+  <splashUrl>http://192.168.99.100:8050</splashUrl>
   <dbConfig>
     <host>localhost</host>
     <port>27017</port>
@@ -90,6 +91,14 @@
       <page>
         <crawlSequence>2</crawlSequence>
         <fieldXpath>//span[@property="addressRegion"]/text()</fieldXpath>
+      </page>
+    </field>
+
+    <field>
+      <name>thumbnail</name>
+      <page>
+        <crawlSequence>2</crawlSequence>
+        <fieldXpath>//div[@class="carouselPhoto border inView"][1]/div[1]/img[1]/@src</fieldXpath>
       </page>
     </field>
 

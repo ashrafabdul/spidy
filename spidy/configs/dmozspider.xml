@@ -2,14 +2,15 @@
 <spider>
 	<name>Dmoz</name>
 	<description>Gets category details</description>
+	<splashUrl>http://192.168.99.100:8050</splashUrl>
 	<dbConfig>
-    <host>localhost</host>
-    <port>27017</port>
-    <username>scrapy</username>
-	<password>1234</password>
-    <dbName>crawl</dbName>
-    <collectionName>Dmoz</collectionName>
-  </dbConfig>
+		<host>localhost</host>
+		<port>27017</port>
+		<username>scrapy</username>
+		<password>1234</password>
+		<dbName>crawl</dbName>
+		<collectionName>Dmoz</collectionName>
+  	</dbConfig>
 	<item>
 		<name>Categories</name>
 		<description>Item class for categories</description>

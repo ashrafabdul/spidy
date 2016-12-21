@@ -2,6 +2,7 @@
 <spider>
   <name>KasiaMobile</name>
   <description>Get all new mobile phones from the website.</description>
+  <splashUrl>http://192.168.99.100:8050</splashUrl>
   <dbConfig>
     <host>localhost</host>
     <port>27017</port>

@@ -4,9 +4,13 @@ Created on Nov 10, 2016
 @author: AshrafAbdul
 '''
 
+import_statements = ['import scrapy\n', 'from scrapy_splash import SlotPolicy\n']
+splash_arg = "meta={'splash': {'args': {'html': 1, 'wait': 0.5, 'render_all': 1,}, 'slot_policy': SlotPolicy.SCRAPY_DEFAULT}}";
+
 
 # Generates item classes
 def generate_item_classes(items):
+
     item_classes = []
     # 1 Generate item class for each item
     for item in items:
@@ -20,7 +24,7 @@ def generate_item_classes(items):
         # 2.2 Get item fields
         field_names = item.findall('.//field/name')
         for field_name in field_names:
-            item_class.append('\t'+field_name.text +' = scrapy.Field()\n')
+            item_class.append('\t'+field_name.text + ' = scrapy.Field()\n')
 
         # 2.3 Add field for storing crawl sequence
         item_class.append('\tcrawl_sequence = scrapy.Field()\n')
@@ -53,7 +57,7 @@ def generate_spider_class(spider):
         # 1 Generate start method
         name = item.find('.//name').text
         start_url = item.find('.//startUrl').text
-        start_requests_method.append('\t\tyield scrapy.Request('+ '\''+ start_url +'\'' +',self.parse_'+name.lower()+'_1)\n')
+        start_requests_method.append('\t\tyield scrapy.Request('+ '\''+ start_url +'\'' +',self.parse_'+name.lower()+'_1, ' + splash_arg + ')\n')
 
         # Get maximum crawl sequence
         crawl_sequences = item.findall('.//field/page/crawlSequence')
@@ -80,7 +84,7 @@ def generate_spider_class(spider):
             if i == int(max_sequence):
                 yield_code.append('yield i\n')
             else:
-                yield_code.append('request = scrapy.Request(response.urljoin(crawl_sequence['+str(i+1)+']),callback=self.parse_'+name.lower()+'_'+str(i+1)+')\n')
+                yield_code.append('request = scrapy.Request(response.urljoin(crawl_sequence['+str(i+1)+']),callback=self.parse_'+name.lower()+'_'+str(i+1) + ', ' + splash_arg + ')\n')
                 yield_code.append('request.meta[\'item\'] = i\n')
                 yield_code.append('yield request\n')
                 
@@ -91,7 +95,7 @@ def generate_spider_class(spider):
                 pagination_xpath = pagination.find('.//xpath').text
                 pagination_code.append('\t\tnext_page_urls = response.xpath('+'\''+ pagination_xpath +'\''+').extract()\n')
                 pagination_code.append('\t\tfor url in next_page_urls:\n')
-                pagination_code.append('\t\t\tyield scrapy.Request(response.urljoin(url),self.parse_'+name.lower()+'_'+str(i)+')\n')
+                pagination_code.append('\t\t\tyield scrapy.Request(response.urljoin(url),self.parse_'+name.lower()+'_'+str(i) + ', ' + splash_arg + ')\n')
 
             fragments = item.findall('.//page/fragmentXpath')
             fragment_code = []
@@ -112,7 +116,7 @@ def generate_spider_class(spider):
                 is_crawl_url = field.find('.//isCrawlUrl')
 
                 if fragment_xpath is not None:
-                    fragment_code.append('\t\t\ti['+'\''+field_name+'\''+'] = fragment.xpath('+'\''+field_xpath+'\''+').extract()\n')
+                    fragment_code.append('\t\t\ti['+'\''+field_name+'\''+'] = [ x.strip() for x in fragment.xpath(' + '\'' + field_xpath + '\'' + ').extract() if x.strip() ]\n')
                 else:
                     direct_code.append('\t\ti[' + '\'' + field_name + '\'' + '] = [ x.strip() for x in response.xpath(' + '\'' + field_xpath + '\'' + ').extract() if x.strip() ]\n')
             
@@ -166,8 +170,8 @@ def generate_pipeline_class(host, port, user, pwd, db_name, coll_name, on_dup, k
         return template.format(host=host,
                                port=port,
                                user=user,
-                               pwd=pwd,
                                db_name=db_name,
+                               pwd=pwd,
                                on_dup=on_dup,
                                coll_name=coll_name,
                                keys=key_string)

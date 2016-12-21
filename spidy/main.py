@@ -8,15 +8,19 @@ import re
 
 
 # Add Mongodb pipeline to scrapy project setting
-def edit_spider_setting(name, setting_file):
+def edit_spider_setting(name, setting_file, splash_url):
     for line in fileinput.input(setting_file, inplace=True):
         if re.match("^\s*ROBOTSTXT_OBEY\s*=\s*.*$", line):
             print "ROBOTSTXT_OBEY = False"
         else:
             print line
-
     setting = "\n\nITEM_PIPELINES = {\n\t'" + name + ".pipelines.MongoPipeline': 300\n}\n\n"
     setting += "EXTENSIONS = {\n\t'scrapy.extensions.feedexport.FeedExporter': None \n}\n\n"
+    setting += "SPIDER_MIDDLEWARES = {\n\t'scrapy_splash.SplashDeduplicateArgsMiddleware': 100 \n}\n\n"
+    setting += "DOWNLOADER_MIDDLEWARES = {\n\t'scrapy_splash.SplashCookiesMiddleware': 723,\n\t'scrapy_splash.SplashMiddleware': 725,\n\t'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810, \n}\n\n"
+    setting += "DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'\n\n"
+    setting += "HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'\n\n"
+    setting += "SPLASH_URL = '" + splash_url + "'\n\n"
     with open(setting_file, 'a+') as f:
         f.write(setting)
 
@@ -80,8 +84,9 @@ if __name__ == '__main__':
     # generate spider file
     with open(output_path + name + '/' + name + '/spiders/' + name +'.py', 'w+') as f:
 
-        # 2 import scrapy
-        f.write("import scrapy\n")
+        # 2 import
+        for line in generate.import_statements:
+            f.write(line)
 
         # 3 create classes for items
         items = spider.findall('.//item')
@@ -113,6 +118,6 @@ if __name__ == '__main__':
                                                      spider.find("item").find("onDuplicate").text,
                                                      keys)
             pipline_file.write(pipeline_content)
-
-    edit_spider_setting(name, output_path + name + '/' + name + '/' + 'settings.py')
+    splash_url = spider.find("splashUrl").text
+    edit_spider_setting(name, output_path + name + '/' + name + '/' + 'settings.py', splash_url)
     edit_scrapy_setting(config_deploy_url, output_path + name + '/' + "scrapy.cfg")
