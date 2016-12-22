@@ -6,6 +6,7 @@
 			<xsd:element name="name" type="xsd:string" maxOccurs="1" minOccurs="1" />
 			<xsd:element name="description" type="xsd:string" maxOccurs="1" minOccurs="1" />
 			<xsd:element name="splashUrl" type="xsd:string" maxOccurs="1" minOccurs="1" />
+			<xsd:element name="renderingWaitTime" type="xsd:decimal" maxOccurs="1" minOccurs="0" />
 			<xsd:element name="dbConfig" type="dbConfig" maxOccurs="1" minOccurs="0"/>
 			<xsd:element name="item" type="itemType" maxOccurs="unbounded" minOccurs="1" />
 		</xsd:sequence>

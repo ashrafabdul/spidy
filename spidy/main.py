@@ -85,7 +85,7 @@ if __name__ == '__main__':
     with open(output_path + name + '/' + name + '/spiders/' + name +'.py', 'w+') as f:
 
         # 2 import
-        for line in generate.import_statements:
+        for line in generate.IMPORT_STATEMENTS:
             f.write(line)
 
         # 3 create classes for items

@@ -4,8 +4,16 @@ Created on Nov 10, 2016
 @author: AshrafAbdul
 '''
 
-import_statements = ['import scrapy\n', 'from scrapy_splash import SlotPolicy\n']
-splash_arg = "meta={'splash': {'args': {'html': 1, 'wait': 0.5, 'render_all': 1,}, 'slot_policy': SlotPolicy.SCRAPY_DEFAULT}}";
+IMPORT_STATEMENTS = ['import scrapy\n', 'from scrapy_splash import SlotPolicy\n']
+
+
+def _get_splash_arg_string(wait_time):
+    splash_arg = "meta={'splash': {'args': {'html': 1"
+    if wait_time != '0':
+        splash_arg += ", 'wait': "
+        splash_arg += wait_time
+    splash_arg += "}, 'slot_policy': SlotPolicy.SCRAPY_DEFAULT}}"
+    return splash_arg
 
 
 # Generates item classes
@@ -50,7 +58,8 @@ def generate_spider_class(spider):
     start_requests_method.append('\n\tdef start_requests(self):\n')
 
     items = spider.findall('.//item')
-    
+    splash_arg = _get_splash_arg_string('0' if spider.find('.//renderingWaitTime') is None else spider.find('.//renderingWaitTime').text)
+
     for item in items:
         item_parse_methods = []
 
